@@ -37,5 +37,19 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
+    # Fields for recommendation algorithms
+    ingredients = models.TextField(blank= True, help_text="Comma separated ingredients")
+    flavor_profile = models.CharField(max_length=100, blank= True)
+    occasion = models.CharField(max_length=100, blank=True)
+    
+    class Meta:
+        ordering = ('name',)
+        
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse('shop:product_detail', args=[self.id,self.slug])
+    
     
     
