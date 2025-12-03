@@ -1,0 +1,36 @@
+{% extends 'shop/base.html' %} {% block title %}Your Shopping Cart - Smart Cake
+Shop{% endblock %} {% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">Your Shopping Cart</h1>
+
+  {% if cart %}
+  <div class="table-responsive">
+    <table class="table cart-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Price</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart %}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              {% if item.product.image %}
+              <img
+                src="{{ item.product.image.url }}"
+                alt="{{ item.product.name }}"
+                class="img-thumbnail me-3"
+                style="width: 80px"
+              />
+              {% else %}
+              <img
+                src="/static/images/placeholder.jpg"
+                alt="{{ item.product.name }}"
+                class="img-thumbnail me-3"
+                style="width: 80px"
+              />
