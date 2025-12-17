@@ -1,0 +1,29 @@
+{% extends 'shop/base.html' %} {% block title %}Checkout - Smart Cake
+Shop{%endblock %} {% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">Checkout</h1>
+
+  <div class="row">
+    <!-- Order Summary -->
+    <div class="col-md-4 order-md-2 mb-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Order Summary</h4>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            {% for item in cart %}
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div class="d-flex align-items-center">
+                {% if item.product.image %}
+                <img
+                  src="{{ item.product.image.url }}"
+                  alt="{{ item.product.name }}"
+                  style="
+                    width: 60px;
+                    height: 60px;
+                    object-fit: cover;
+                    margin-right: 10px;
+                  "
+                />
+                {% else %}
