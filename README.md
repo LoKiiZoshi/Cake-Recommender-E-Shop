@@ -65,7 +65,7 @@ CakeShop/
 
 │   ├── views.py
 
-    ├── urls.py
+│     ├── urls.py
 
 
 ├── smart_cake_shop/       # Project settings
