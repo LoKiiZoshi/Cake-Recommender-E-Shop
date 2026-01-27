@@ -1,4 +1,4 @@
-🎂 Smart Cake Shop – Django E-Commerce Project
+Smart Cake Shop – Django E-Commerce Project
 
 A Django-based eCommerce web application for an online cake shop.
 This project includes product management, shopping cart, recommendations, authentication, and admin dashboard, built with clean backend logic and modular app structure.
@@ -10,8 +10,7 @@ Python / Django Backend Developer Portfolio
 Technical Interviews
 
 Real-world Django practice
-
-🚀 Features
+ Features
 
 User Authentication (Login / Register)
 
@@ -47,22 +46,37 @@ Version Control: Git, GitHub
 CakeShop/
 
 ├── accounts/              # User authentication
+
 ├── admin_dashboard/       # Admin-related features
+
 ├── chatbot/               # Chatbot logic (if enabled)
+
 ├── shop/                  # Core shop logic
+
 │   ├── cart.py            # Cart functionality
+
 │   ├── context_processors.py
+
 │   ├── forms.py
+
 │   ├── models.py
+
 │   ├── recommendation.py # Product recommendations
+
 │   ├── views.py
-│   ├── urls.py
+
+    ├── urls.py
+
 
 ├── smart_cake_shop/       # Project settings
-│
+
+
 ├── db.sqlite3
+
 ├── manage.py
+
 ├── requirements.txt
+
 └── README.md
 
 ⚙️ Installation & Setup Guide
