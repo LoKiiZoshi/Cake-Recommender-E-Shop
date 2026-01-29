@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chatbot</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f0f0f0;
+      }
+      #chatbox {
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .message {
+        margin-bottom: 10px;
+      }
+      .user {
+        color: blue;
+      }
+      .bot {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chatbox">
+      <h2>💬 Gemini Chatbot</h2>
+      <div id="messages"></div>
+      <form id="chat-form" method="post">
+        {% csrf_token %}   
+        <input
+          type="text"
+          id="message"
+          name="message"
+          placeholder="Ask something..."
+          style="width: 80%"
+          required
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById("chat-form");
+      const messageInput = document.getElementById("message");
+      const messagesDiv = document.getElementById("messages");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const message = messageInput.value;
+        appendMessage("You", message, "user");
+        messageInput.value = "";
+
+        fetch("{% url 'chatbot' %}", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({ message }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            appendMessage("Bot", data.response, "bot");
+          });
+      });
+
+      function appendMessage(sender, text, className) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message " + className;
+        messageDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+    </script>
+  </body>
+</html>
