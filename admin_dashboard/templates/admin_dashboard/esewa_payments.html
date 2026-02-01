@@ -1,0 +1,78 @@
+{% extends 'shop/base.html' %} {% block title %}eSewa Payments - Admin
+Dashboard{% endblock %} {% block content %}
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>eSewa Payments</h1>
+    <a
+      href="{% url 'admin_dashboard:dashboard' %}"
+      class="btn btn-outline-primary"
+    >
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+  </div>
+
+  {% if payments %}
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Order Ref</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Payment Status</th>
+          <th>Order Status</th>
+          <th>Transaction ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in payments %}
+        <tr>
+          <td>{{ order.order_ref }}</td>
+          <td>{{ order.user.username }}</td>
+          <td>{{ order.created|date:"M d, Y" }}</td>
+          <td>Rs. {{ order.get_total_cost }}</td>
+          <td>
+            <span
+              class="badge {% if order.payment_status == 'completed' %}bg-success{% elif order.payment_status == 'failed' %}bg-danger{% elif order.payment_status == 'pending_payment' %}bg-warning{% else %}bg-secondary{% endif %}"
+            >
+              {{ order.get_payment_status_display }}
+            </span>
+          </td>
+          <td>
+            <span
+              class="badge {% if order.status == 'delivered' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% elif order.status == 'processing' %}bg-info{% else %}bg-warning{% endif %}"
+            >
+              {{ order.get_status_display }}
+            </span>
+          </td>
+          <td>{{ order.transaction_id|default:"N/A" }}</td>
+          <td>
+            <div class="btn-group">
+              <a
+                href="{% url 'admin_dashboard:order_detail' order.id %}"
+                class="btn btn-sm btn-primary"
+              >
+                <i class="fas fa-eye"></i> View
+              </a>
+              <a
+                href="{% url 'admin_dashboard:process_esewa_payment' order.id %}"
+                class="btn btn-sm btn-success"
+              >
+                <i class="fas fa-check-circle"></i> Process
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    <p class="mb-0">No eSewa payments found.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

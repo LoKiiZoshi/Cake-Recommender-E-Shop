@@ -1,0 +1,100 @@
+{% extends 'shop/base.html' %} {% block title %}Manage Products - Admin
+Dashboard{% endblock %} {% block content %}
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Manage Products</h1>
+    <a
+      href="{% url 'admin_dashboard:product_create' %}"
+      class="btn btn-primary"
+    >
+      <i class="fas fa-plus"></i> Add New Product
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Available</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in products %}
+            <tr>
+              <td>
+                {% if product.image %}
+                <img
+                  src="{{ product.image.url }}"
+                  alt="{{ product.name }}"
+                  class="img-thumbnail"
+                  style="width: 50px"
+                />
+                {% else %}
+                <img
+                  src="/static/images/placeholder.jpg"
+                  alt="{{ product.name }}"
+                  class="img-thumbnail"
+                  style="width: 50px"
+                />
+                {% endif %}
+              </td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.category.name }}</td>
+              <td>RS: {{ product.price }}</td>
+              <td>
+                {% if product.available %}
+                <span class="badge bg-success">Yes</span>
+                {% else %}
+                <span class="badge bg-danger">No</span>
+                {% endif %}
+              </td>
+              <td>
+                <a
+                  href="{{ product.get_absolute_url }}"
+                  class="btn btn-sm btn-info"
+                  target="_blank"
+                >
+                  <i class="fas fa-eye"></i>
+                </a>
+                <a
+                  href="{% url 'admin_dashboard:product_edit' product.id %}"
+                  class="btn btn-sm btn-primary"
+                >
+                  <i class="fas fa-edit"></i>
+                </a>
+                <a
+                  href="{% url 'admin_dashboard:product_delete' product.id %}"
+                  class="btn btn-sm btn-danger"
+                >
+                  <i class="fas fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center">No products available.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a
+      href="{% url 'admin_dashboard:dashboard' %}"
+      class="btn btn-outline-secondary"
+    >
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}
