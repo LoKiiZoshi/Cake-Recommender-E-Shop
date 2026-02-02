@@ -1,0 +1,851 @@
+{% extends 'shop/base.html' %} {% block title %} Smart Cake Shop with AI -
+Home{% endblock %} {% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h1>Sweet Moments Perfect Cakes</h1>
+        <p>
+          Let us guide you to the cake that makes your celebration truly
+          unforgettable.
+        </p>
+      </div>
+      {% comment %}
+      <div class="col-md-6">
+        <img
+          src="/static/images/Smartckae00399x349 (1).jpg"
+          alt="Delicious Cake"
+          class="img-fluid rounded"
+        />
+      </div>
+      {% endcomment %}
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<section class="container my-5">
+  <h2 class="text-center mb-4">Featured Cakes</h2>
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-3 mb-4">
+      <div class="card h-100">
+        {% if product.image %}
+        <img
+          src="{{ product.image.url }}"
+          alt="{{ product.name }}"
+          class="card-img-top"
+        />
+        {% else %}
+        <img
+          src="/static/images/placeholder.jpg"
+          alt="{{ product.name }}"
+          class="card-img-top"
+        />
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description|truncatechars:50 }}</p>
+          <p class="card-price">Rs: {{ product.price }}</p>
+          <a
+            href="{{ product.get_absolute_url }}"
+            class="btn btn-outline-primary"
+            >View Details</a
+          >
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+      <p>No products available yet.</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- AI Recommendations -->
+{% if user.is_authenticated and recommended_products %}
+<section class="container my-5">
+  <h2 class="text-center mb-4">Recommended for You</h2>
+  <div class="row">
+    {% for product in recommended_products %}
+    <div class="col-md-3 mb-4">
+      <div class="card h-100">
+        {% if product.image %}
+        <img
+          src="{{ product.image.url }}"
+          alt="{{ product.name }}"
+          class="card-img-top"
+        />
+        {% else %}
+        <img
+          src="/static/images/placeholder.jpg"
+          alt="{{ product.name }}"
+          class="card-img-top"
+        />
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description|truncatechars:50 }}</p>
+          <p class="card-price">RS: {{ product.price }}</p>
+          <a
+            href="{{ product.get_absolute_url }}"
+            class="btn btn-outline-primary"
+            >View Details</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- Clean Algorithm Recommendations -->
+{% if user.is_authenticated and clean_recommended_products %}
+<section class="container my-5">
+  <h2 class="text-center mb-4">Clean Algorithm Recommendations</h2>
+  <div class="row">
+    {% for product in clean_recommended_products %}
+    <div class="col-md-3 mb-4">
+      <div class="card h-100">
+        {% if product.image %}
+        <img
+          src="{{ product.image.url }}"
+          alt="{{ product.name }}"
+          class="card-img-top"
+        />
+        {% else %}
+        <img
+          src="/static/images/placeholder.jpg"
+          alt="{{ product.name }}"
+          class="card-img-top"
+        />
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description|truncatechars:50 }}</p>
+          <p class="card-price">RS: {{ product.price }}</p>
+          <a
+            href="{{ product.get_absolute_url }}"
+            class="btn btn-outline-primary"
+            >View Details</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+<!-- About Our Cake Suggestions -->
+<section class="container my-5">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <h2>Personalized Cake Suggestions</h2>
+      <p>We make it easy to find the cake that’s just right for you:</p>
+      <ul>
+        <li>
+          <strong>Inspired by Others:</strong> See the cakes other happy
+          customers have loved.
+        </li>
+        <li>
+          <strong>Made for Your Taste:</strong> Get ideas based on the flavors
+          and styles you enjoy.
+        </li>
+        <li>
+          <strong>Mix & Match:</strong> We combine different ideas to tempt your
+          taste buds.
+        </li>
+        <li>
+          <strong>Discover New Treats:</strong> Explore cakes similar to your
+          favorites.
+        </li>
+        <li>
+          <strong>Fair & Fresh:</strong> A balanced variety so you always have
+          something new to try.
+        </li>
+      </ul>
+      <p>
+        The more you explore and enjoy, the better we get at finding your
+        perfect cake!
+      </p>
+    </div>
+    <div class="col-md-6">
+      <img
+        src="/static/images/heroimage.png"
+        alt="Cake Suggestions"
+        class="img-fluid rounded"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="container my-5">
+  <h2 class="text-center mb-4">Explore Categories</h2>
+  <div class="row">
+    {% for category in categories %}
+    <div class="col-md-4 mb-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <h3 class="card-title">{{ category.name }}</h3>
+          <p class="card-text">{{ category.description|truncatechars:100 }}</p>
+          <a href="{{ category.get_absolute_url }}" class="btn btn-primary"
+            >Browse {{ category.name }}</a
+          >
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+      <p>No categories available yet.</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+<!-- Dynamic Chatbot Widget - Bottom Right Position -->
+<div id="chatbot-container">
+  <div id="chatbot-toggle" onclick="toggleChatbot()">
+    <div class="chatbot-icon">
+      <div class="robot-head">
+        <div class="robot-eyes">
+          <div class="eye left-eye"></div>
+          <div class="eye right-eye"></div>
+        </div>
+        <div class="robot-mouth"></div>
+      </div>
+    </div>
+    <div class="chatbot-text-container">
+      <span class="chatbot-title">Smart Cake Shop</span>
+      <span class="chatbot-subtitle"> Assistant</span>
+    </div>
+    <div class="notification-dot"></div>
+  </div>
+
+  <div id="chatbot-window" class="chatbot-hidden">
+    <div class="chatbot-header">
+      <div class="chatbot-avatar">
+        <div class="robot-head">
+          <div class="robot-eyes">
+            <div class="eye left-eye"></div>
+            <div class="eye right-eye"></div>
+          </div>
+          <div class="robot-mouth"></div>
+        </div>
+      </div>
+      <div class="chatbot-info">
+        <h4>Smart Cake Shop</h4>
+        <span>❤️‍🩹 Ready to help!</span>
+      </div>
+      <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+    </div>
+
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="message bot-message">
+        <div class="message-avatar">🤖</div>
+        <div class="message-content">
+          <p>Hi! I'm your Smart Cake Assistant!❤️😍</p>
+          <p>
+            I can help you find the perfect cake for any occasion. What are you
+            looking for today?
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatbot-input">
+      <form id="chatbot-form" method="post">
+        {% csrf_token %}
+        <input
+          type="text"
+          id="chatbot-input-field"
+          name="message"
+          placeholder="Ask me about cakes, flavors, occasions..."
+          onkeypress="handleChatInput(event)"
+          required
+        />
+        <button type="submit">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Chatbot Styles - Bottom Right Position */
+  #chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      sans-serif;
+  }
+
+  #chatbot-toggle {
+    background: linear-gradient(135deg, #ff1493, #ff69b4, #ffc0cb);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+    animation: bounce 3s infinite;
+    position: relative;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    min-width: 200px;
+  }
+
+  #chatbot-toggle:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(255, 20, 147, 0.6);
+    background: linear-gradient(135deg, #ff1493, #ff1493, #ff69b4);
+  }
+
+  @keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-8px);
+    }
+    60% {
+      transform: translateY(-4px);
+    }
+  }
+
+  .chatbot-icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .robot-head {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .robot-eyes {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 3px;
+  }
+
+  .eye {
+    width: 6px;
+    height: 6px;
+    background: #ff1493;
+    border-radius: 50%;
+    animation: blink 4s infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    90%,
+    100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.1);
+    }
+  }
+
+  .robot-mouth {
+    width: 8px;
+    height: 3px;
+    background: #ff1493;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .chatbot-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chatbot-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    line-height: 1.2;
+  }
+
+  .chatbot-subtitle {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.9;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    line-height: 1.2;
+  }
+
+  .notification-dot {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+    background: #00ff00;
+    border-radius: 50%;
+    border: 2px solid white;
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  #chatbot-window {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 350px;
+    height: 450px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .chatbot-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+  }
+
+  .chatbot-header {
+    background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .chatbot-avatar {
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chatbot-info h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .chatbot-info span {
+    font-size: 12px;
+    opacity: 0.9;
+  }
+
+  .chatbot-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .chatbot-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .chatbot-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f8f9fa;
+  }
+
+  .message {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .bot-message {
+    justify-content: flex-start;
+  }
+
+  .user-message {
+    justify-content: flex-end;
+  }
+
+  .message-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .bot-message .message-avatar {
+    background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+  }
+
+  .user-message .message-avatar {
+    background: #007bff;
+    color: white;
+  }
+
+  .message-content {
+    max-width: 250px;
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .bot-message .message-content {
+    background: white;
+    border-bottom-left-radius: 5px;
+  }
+
+  .user-message .message-content {
+    background: #007bff;
+    color: white;
+    border-bottom-right-radius: 5px;
+  }
+
+  .message-content p {
+    margin: 0 0 5px 0;
+  }
+
+  .message-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .chatbot-input {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #eee;
+  }
+
+  .chatbot-input form {
+    display: flex;
+    gap: 10px;
+  }
+
+  .chatbot-input input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .chatbot-input input:focus {
+    border-color: #ff6b9d;
+  }
+
+  .chatbot-input button {
+    background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+
+  .chatbot-input button:hover {
+    transform: scale(1.05);
+  }
+
+  .chatbot-input button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 15px;
+    background: white;
+    border-radius: 15px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .typing-dots {
+    display: flex;
+    gap: 3px;
+  }
+
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    background: #999;
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+  }
+
+  .typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes typing {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    #chatbot-container {
+      bottom: 15px;
+      right: 15px;
+    }
+
+    #chatbot-toggle {
+      min-width: 160px;
+      padding: 10px 15px;
+    }
+
+    .chatbot-title {
+      font-size: 12px;
+    }
+
+    .chatbot-subtitle {
+      font-size: 10px;
+    }
+
+    #chatbot-window {
+      width: 300px;
+      height: 400px;
+    }
+  }
+</style>
+<script>
+  let isTyping = false;
+
+  function toggleChatbot() {
+    const chatbotWindow = document.getElementById("chatbot-window");
+    chatbotWindow.classList.toggle("chatbot-hidden");
+  }
+
+  function handleChatInput(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  }
+
+  function sendMessage() {
+    const form = document.getElementById("chatbot-form");
+    const inputField = document.getElementById("chatbot-input-field");
+    const message = inputField.value.trim();
+    if (message === "" || isTyping) return;
+
+    addMessage(message, "user");
+    inputField.value = "";
+    showTypingIndicator();
+    isTyping = true;
+
+    fetch("{% url 'chatbot' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({ message }),
+    })
+      .then(async (response) => {
+        hideTypingIndicator();
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message bot-message";
+
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = "🤖";
+
+        const content = document.createElement("div");
+        content.className = "message-content";
+        content.innerHTML = "<p></p>";
+
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(content);
+        const messagesContainer = document.getElementById("chatbot-messages");
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        let partialText = "";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          partialText += decoder.decode(value, { stream: true });
+          content.innerHTML = `<p>${partialText}</p>`;
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        isTyping = false;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        hideTypingIndicator();
+        addMessage(
+          "Sorry, I'm having trouble connecting. Please try again later.",
+          "bot"
+        );
+        isTyping = false;
+      });
+  }
+
+  function addMessage(text, sender) {
+    const messagesContainer = document.getElementById("chatbot-messages");
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${sender}-message`;
+
+    const avatar = document.createElement("div");
+    avatar.className = "message-avatar";
+    avatar.textContent = sender === "user" ? "👤" : "🤖";
+
+    const content = document.createElement("div");
+    content.className = "message-content";
+    content.innerHTML = `<p>${text}</p>`;
+
+    if (sender === "user") {
+      messageDiv.appendChild(content);
+      messageDiv.appendChild(avatar);
+    } else {
+      messageDiv.appendChild(avatar);
+      messageDiv.appendChild(content);
+    }
+
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function showTypingIndicator() {
+    const messagesContainer = document.getElementById("chatbot-messages");
+    const typingDiv = document.createElement("div");
+    typingDiv.className = "message bot-message";
+    typingDiv.id = "typing-indicator";
+
+    const avatar = document.createElement("div");
+    avatar.className = "message-avatar";
+    avatar.textContent = "🤖";
+
+    const content = document.createElement("div");
+    content.className = "typing-indicator";
+    content.innerHTML = `
+      <span>AI is typing</span>
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    `;
+
+    typingDiv.appendChild(avatar);
+    typingDiv.appendChild(content);
+    messagesContainer.appendChild(typingDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function hideTypingIndicator() {
+    const typingIndicator = document.getElementById("typing-indicator");
+    if (typingIndicator) typingIndicator.remove();
+  }
+
+  document
+    .getElementById("chatbot-form")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      sendMessage();
+    });
+
+  setTimeout(() => {
+    const chatbotWindow = document.getElementById("chatbot-window");
+    // toggleChatbot(); // uncomment to auto-open
+  }, 5000);
+</script>
+
+{% endblock %}

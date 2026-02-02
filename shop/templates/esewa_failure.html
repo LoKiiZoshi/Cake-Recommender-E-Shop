@@ -1,0 +1,64 @@
+{% extends "shop/base.html" %} {% block title %} Payment Failed{% endblock %}
+{%block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+          <h3 class="mb-0">
+            <i class="fas fa-times-circle me-2"></i> Payment Failed
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <i
+              class="fas fa-times-circle text-danger"
+              style="font-size: 5rem"
+            ></i>
+          </div>
+
+          <div class="alert alert-danger">
+            <p class="mb-0">Sorry, your payment could not be processed.</p>
+            <p class="mb-0">Reason: {{ error_message }}</p>
+          </div>
+
+          <div class="mt-4">
+            <h5>What would you like to do?</h5>
+            <ul class="list-group mb-4">
+              <li class="list-group-item">
+                <i class="fas fa-redo me-2"></i> Try the payment again
+              </li>
+              <li class="list-group-item">
+                <i class="fas fa-credit-card me-2"></i> Choose a different
+                payment method
+              </li>
+              <li class="list-group-item">
+                <i class="fas fa-headset me-2"></i> Contact customer support for
+                assistance
+              </li>
+            </ul>
+          </div>
+
+          <div class="text-center">
+            <a href="{% url 'shop:checkout' %}" class="btn btn-primary">
+              <i class="fas fa-arrow-left me-2"></i> Return to Checkout
+            </a>
+            <a
+              href="{% url 'shop:home' %}"
+              class="btn btn-outline-secondary ms-2"
+            >
+              <i class="fas fa-home me-2"></i> Continue Shopping
+            </a>
+          </div>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+            <i class="fas fa-info-circle me-1"></i> If you continue to
+            experience issues, please contact our customer support.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

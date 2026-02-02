@@ -1,0 +1,135 @@
+{% extends 'shop/base.html' %} {% block title %}{{ product.name }} - Smart Cake
+Shop{% endblock %} {% block content %}
+<div class="container product-detail">
+  <div class="row">
+
+
+    <!-- Product Image -->
+    <div class="col-md-6">
+      <div class="product-image">
+        {% if product.image %}
+        <img
+          src="{{ product.image.url }}"
+          alt="{{ product.name }}"
+          class="img-fluid"
+        />
+        {% else %}
+        <img
+          src="/static/images/placeholder.jpg"
+          alt="{{ product.name }}"
+          class="img-fluid"
+        />
+        {% endif %}
+      </div>
+    </div>
+
+
+
+    <!-- Product Info -->
+    <div class="col-md-6 product-info">
+      <h1>{{ product.name }}</h1>
+      <p class="product-price">RS :{{ product.price }}</p>
+
+      <div class="product-description">
+        <h4>Description</h4>
+        <p>{{ product.description }}</p>
+      </div>
+
+      {% if product.ingredients %}
+      <div class="mb-3">
+        <h4>Ingredients</h4>
+        <p>{{ product.ingredients }}</p>
+      </div>
+      {% endif %} {% if product.flavor_profile %}
+      <div class="mb-3">
+        <h4>Flavor Profile</h4>
+        <p>{{ product.flavor_profile }}</p>
+      </div>
+      {% endif %} {% if product.occasion %}
+      <div class="mb-3">
+        <h4>Perfect For</h4>
+        <p>{{ product.occasion }}</p>
+      </div>
+      {% endif %}
+
+      <form
+        action="{% url 'shop:cart_add' product.id %}"
+        method="post"
+        class="mt-4"
+      >
+        {% csrf_token %}
+        <div class="row g-3 align-items-center mb-3">
+          <div class="col-auto">
+            <label for="quantity" class="form-label">Quantity</label>
+          </div>
+          <div class="col-auto">
+            <input
+              type="number"
+              name="quantity"
+              id="quantity"
+              class="form-control"
+              value="1"
+              min="1"
+              max="10"
+            />
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="mt-4">
+        <a
+          href="{% url 'shop:product_list_by_category' product.category.slug %}"
+          class="btn btn-outline-secondary"
+        >
+          <i class="fas fa-arrow-left"></i> Back to {{ product.category.name }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <!-- Similar Products -->
+  {% if similar_products %}
+  <div class="mt-5">
+    <h3>You Might Also Like</h3>
+    <div class="row">
+      {% for product in similar_products %}
+      <div class="col-md-3 mb-4">
+        <div class="card h-100">
+          {% if product.image %}
+          <img
+            src="{{ product.image.url }}"
+            alt="{{ product.name }}"
+            class="card-img-top"
+          />
+          {% else %}
+          <img
+            src="/static/images/placeholder.jpg"
+            alt="{{ product.name }}"
+            class="card-img-top"
+          />
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description|truncatechars:50 }}</p>
+            <p class="card-price">RS:{{ product.price }}</p>
+            <a
+              href="{{ product.get_absolute_url }}"
+              class="btn btn-outline-primary"
+              >View Details</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

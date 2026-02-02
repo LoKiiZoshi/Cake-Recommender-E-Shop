@@ -1,0 +1,74 @@
+{% extends "shop/base.html" %} {% block title %}Payment Successful{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h3 class="mb-0">
+            <i class="fas fa-check-circle me-2"></i> Payment Successful!
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <i
+              class="fas fa-check-circle text-success"
+              style="font-size: 5rem"
+            ></i>
+          </div>
+
+          <div class="alert alert-success">
+            <p class="mb-0">
+              Thank you for your purchase. Your order is now being processed.
+            </p>
+          </div>
+
+          <div class="order-details mb-4">
+            <h5>Order Details</h5>
+            <table class="table table-bordered">
+              <tr>
+                <th>Order ID:</th>
+                <td>#{{ order.id }}</td>
+              </tr>
+              <tr>
+                <th>Date:</th>
+                <td>{{ order.created|date:"F d, Y" }}</td>
+              </tr>
+              <tr>
+                <th>Total Amount:</th>
+                <td>Rs. {{ order.get_total_cost }}</td>
+              </tr>
+              <tr>
+                <th>Payment Method:</th>
+                <td>eSewa</td>
+              </tr>
+              <tr>
+                <th>Transaction ID:</th>
+                <td>{{ order.transaction_id }}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="text-center">
+            <a href="{% url 'shop:order_history' %}" class="btn btn-primary">
+              <i class="fas fa-list me-2"></i> View Order History
+            </a>
+            <a
+              href="{% url 'shop:home' %}"
+              class="btn btn-outline-secondary ms-2"
+            >
+              <i class="fas fa-home me-2"></i> Continue Shopping
+            </a>
+          </div>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+            <i class="fas fa-info-circle me-1"></i> A confirmation email has
+            been sent to your registered email address.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,822 @@
+{% extends 'shop/base.html' %}  
+{% block title %}Shop - Smart Cake Shop with AI{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    /* Primary Colors */
+    --primary-color: #f557a6ff; /* Hot Pink */
+    --primary-light: #ffb6c1; /* Light Pink */
+    --primary-lighter: #ffeef2; /* Very Light Pink */
+    --primary-dark: rgba(248, 97, 192, 1); /* Medium Violet Red */
+    --primary-darker: rgba(250, 71, 190, 1); /* Dark Pink */
+
+    /* Secondary Colors */
+    --secondary-color: #f8f9fa;
+    --secondary-dark: #e9ecef;
+    --secondary-darker: #dee2e6;
+
+    /* Accent Colors */
+    --accent-color: rgba(245, 77, 166, 1); /* Purple */
+    --accent-light: rgba(244, 69, 165, 1);
+    --accent-dark: rgba(241, 53, 163, 1);
+
+    /* Neutral Colors */
+    --text-color: #333333;
+    --text-light: #666666;
+    --text-lighter: #999999;
+    --light-text: #f8f9fa;
+    --border-color: #dee2e6;
+
+    /* Status Colors */
+    --success-color: #28a745;
+    --success-light: #d4edda;
+    --success-dark: #1e7e34;
+    --danger-color: #dc3545;
+    --danger-light: #f8d7da;
+    --danger-dark: #bd2130;
+    --warning-color: #ffc107;
+    --warning-light: #fff3cd;
+    --warning-dark: #d39e00;
+    --info-color: #17a2b8;
+    --info-light: #d1ecf1;
+    --info-dark: #117a8b;
+  }
+
+  .shop-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    padding: 60px 0;
+  }
+
+  .filter-sidebar {
+    background: var(--primary-lighter);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.1);
+    position: sticky;
+    top: 20px;
+  }
+
+  .filter-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--primary-light);
+  }
+
+  .filter-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .filter-title {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .price-range {
+    width: 100%;
+    accent-color: var(--primary-color);
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+  }
+
+  .product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.3);
+    border-color: var(--primary-light);
+  }
+
+  .product-image {
+    position: relative;
+    overflow: hidden;
+    height: 220px;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-image img {
+    transform: scale(1.1);
+  }
+
+  .product-actions {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card:hover .product-actions {
+    opacity: 1;
+  }
+
+  .action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .action-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .product-info {
+    padding: 20px;
+  }
+
+  .product-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--text-color);
+  }
+
+  .product-description {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
+  }
+
+  .product-price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
+  .current-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  .btn-pink {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  .btn-pink:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-pink {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-pink:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+  }
+
+  .text-pink {
+    color: var(--primary-color) !important;
+  }
+
+  .sort-dropdown {
+    border: 2px solid var(--primary-light);
+    border-radius: 10px;
+    padding: 8px 15px;
+    background: white;
+  }
+
+  .sort-dropdown:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(255, 105, 180, 0.25);
+  }
+
+  .search-bar {
+    position: relative;
+  }
+
+  .search-bar input {
+    border: 2px solid var(--primary-light);
+    border-radius: 25px;
+    padding: 12px 50px 12px 20px;
+  }
+
+  .search-bar input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(255, 105, 180, 0.25);
+  }
+
+  .search-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    color: white;
+  }
+
+  .category-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+
+  .category-tab {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-light);
+    border-radius: 25px;
+    background: white;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .category-tab:hover,
+  .category-tab.active {
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+  }
+
+  .loading-spinner {
+    display: none;
+    text-align: center;
+    padding: 40px;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--primary-lighter);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .pagination .page-link {
+    color: var(--primary-color);
+    border-color: var(--primary-light);
+  }
+
+  .pagination .page-link:hover {
+    background-color: var(--primary-lighter);
+    border-color: var(--primary-color);
+  }
+
+  .pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+
+  @media (max-width: 768px) {
+    .filter-sidebar {
+      margin-bottom: 30px;
+    }
+
+    .product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .category-tabs {
+      justify-content: center;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Shop Hero Section -->
+<section class="shop-hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="display-4 fw-bold mb-3">🛍️ Sweet Cake Collection</h1>
+        <p class="lead mb-4">
+          Discover our amazing collection of handcrafted cakes with AI-powered recommendations. 
+          From birthday celebrations to wedding ceremonies, find the perfect cake for every occasion.
+        </p>
+        <div class="d-flex gap-3 flex-wrap">
+          <span class="badge bg-pink fs-6 px-3 py-2">
+            <i class="fas fa-birthday-cake me-2"></i>{{ result_count }}+ Varieties
+          </span>
+          <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+            <i class="fas fa-truck me-2"></i>Free Delivery
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4 text-center">
+        <div class="position-relative">
+          <i class="fas fa-store text-white" style="font-size: 8rem; opacity: 0.3"></i>
+          <div class="position-absolute top-50 start-50 translate-middle">
+            <div class="bg-white rounded-circle p-4 shadow-lg">
+              <i class="fas fa-shopping-cart text-pink fs-1"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search and Filter Section -->
+<section class="container my-5">
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="search-bar">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search for your favorite cakes..."
+          id="searchInput"
+          value="{{ search_query }}"
+        />
+        <button class="search-btn" onclick="searchProducts()">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <select class="form-select sort-dropdown" id="sortSelect" onchange="sortProducts()">
+        <option value="">Sort by...</option>
+        <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name (A-Z)</option>
+        <option value="name-desc" {% if sort_by == 'name-desc' %}selected{% endif %}>Name (Z-A)</option>
+        <option value="price" {% if sort_by == 'price' %}selected{% endif %}>Price (Low to High)</option>
+        <option value="price-desc" {% if sort_by == 'price-desc' %}selected{% endif %}>Price (High to Low)</option>
+        <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-pink" onclick="toggleView('grid')" id="gridView">
+          <i class="fas fa-th"></i>
+        </button>
+        <button class="btn btn-outline-pink" onclick="toggleView('list')" id="listView">
+          <i class="fas fa-list"></i>
+        </button>
+        <button class="btn btn-pink" onclick="clearFilters()">
+          <i class="fas fa-refresh"></i> Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Tabs -->
+  <div class="category-tabs">
+    <span class="category-tab {% if not category %}active{% endif %}" data-category="all">All Cakes</span>
+    {% for cat in categories %}
+    <span class="category-tab {% if category and category.slug == cat.slug %}active{% endif %}" 
+          data-category="{{ cat.slug }}">{{ cat.name }}</span>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Main Shop Content -->
+<section class="container">
+  <div class="row">
+    <!-- Filter Sidebar -->
+    <div class="col-lg-3 col-md-4">
+      <div class="filter-sidebar">
+        <h5 class="filter-title">
+          <i class="fas fa-filter me-2"></i>Filter Products
+        </h5>
+
+        <!-- Price Range -->
+        <div class="filter-section">
+          <h6 class="filter-title">💰 Price Range</h6>
+          <div class="mb-3">
+            <label for="priceRange" class="form-label">
+              Rs 0 - Rs <span id="priceValue">{{ price_range }}</span>
+            </label>
+            <input
+              type="range"
+              class="price-range"
+              id="priceRange"
+              min="0"
+              max="5000"
+              value="{{ price_range }}"
+              oninput="updatePriceValue(this.value)"
+            />
+          </div>
+        </div>
+
+        <!-- Apply Filters Button -->
+        <button class="btn btn-pink w-100 mt-3" onclick="applyFilters()">
+          <i class="fas fa-check me-2"></i>Apply Filters
+        </button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="col-lg-9 col-md-8">
+      <!-- Results Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h5 class="text-pink mb-1">
+            Showing <span id="resultCount">{{ result_count }}</span> results
+          </h5>
+          <small class="text-muted">Find your perfect cake from our collection</small>
+        </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p class="text-muted mt-3">Loading delicious cakes...</p>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="product-grid" id="productsGrid">
+        {% for product in products %}
+        <div class="product-card" data-product-id="{{ product.id }}">
+          <div class="product-image">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            {% else %}
+            <img src="/placeholder.svg?height=220&width=280" alt="{{ product.name }}" />
+            {% endif %}
+
+            <div class="product-actions">
+              <button class="action-btn" title="Quick View" onclick="quickView('{{ product.id }}')">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="product-info">
+            <h5 class="product-title">{{ product.name }}</h5>
+            <p class="product-description">
+              {{ product.description|truncatechars:60 }}
+            </p>
+
+            <div class="product-price">
+              <span class="current-price">Rs {{ product.price }}</span>
+            </div>
+
+            <div class="d-grid gap-2">
+              <a href="{{ product.get_absolute_url }}" class="btn btn-pink">
+                <i class="fas fa-shopping-cart me-2"></i>View Details
+              </a>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+          <i class="fas fa-birthday-cake text-pink" style="font-size: 4rem; opacity: 0.3"></i>
+          <h4 class="text-muted mt-3">No cakes found</h4>
+          <p class="text-muted">Try adjusting your filters or search terms</p>
+          <button class="btn btn-pink" onclick="clearFilters()">
+            <i class="fas fa-refresh me-2"></i>Clear Filters
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if products.has_other_pages %}
+      <nav aria-label="Products pagination" class="mt-5">
+        <ul class="pagination justify-content-center">
+          {% if products.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ products.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if price_range %}&price={{ price_range }}{% endif %}{% if category %}&category={{ category.slug }}{% endif %}">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+          </li>
+          {% endif %}
+
+          {% for num in products.paginator.page_range %}
+          {% if products.number == num %}
+          <li class="page-item active">
+            <span class="page-link">{{ num }}</span>
+          </li>
+          {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if price_range %}&price={{ price_range }}{% endif %}{% if category %}&category={{ category.slug }}{% endif %}">{{ num }}</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+
+          {% if products.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ products.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if price_range %}&price={{ price_range }}{% endif %}{% if category %}&category={{ category.slug }}{% endif %}">
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Quick View Modal -->
+<div class="modal fade" id="quickViewModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-pink">
+          <i class="fas fa-eye me-2"></i>Quick View
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="quickViewContent">
+        <!-- Content will be loaded here -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Global variables
+let currentFilters = {
+    search: '{{ search_query }}',
+    sort: '{{ sort_by }}',
+    price: '{{ price_range }}',
+    category: '{% if category %}{{ category.slug }}{% else %}all{% endif %}'
+};
+
+// Price range update
+function updatePriceValue(value) {
+    document.getElementById('priceValue').textContent = value;
+    currentFilters.price = value;
+}
+
+// Search functionality
+function searchProducts() {
+    const searchTerm = document.getElementById('searchInput').value.trim();
+    currentFilters.search = searchTerm;
+    applyFilters();
+}
+
+// Sort functionality
+function sortProducts() {
+    const sortValue = document.getElementById('sortSelect').value;
+    currentFilters.sort = sortValue;
+    applyFilters();
+}
+
+// View toggle
+function toggleView(viewType) {
+    const grid = document.getElementById('productsGrid');
+    const gridBtn = document.getElementById('gridView');
+    const listBtn = document.getElementById('listView');
+
+    if (viewType === 'grid') {
+        grid.className = 'product-grid';
+        gridBtn.classList.add('active');
+        listBtn.classList.remove('active');
+    } else {
+        grid.className = 'row';
+        listBtn.classList.add('active');
+        gridBtn.classList.remove('active');
+    }
+}
+
+// Clear filters
+function clearFilters() {
+    // Reset all form elements
+    document.getElementById('priceRange').value = 5000;
+    document.getElementById('priceValue').textContent = '5000';
+    document.getElementById('sortSelect').value = '';
+    document.getElementById('searchInput').value = '';
+
+    // Reset category tabs
+    document.querySelectorAll('.category-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelector('.category-tab[data-category="all"]').classList.add('active');
+
+    // Reset filters object
+    currentFilters = {
+        search: '',
+        sort: '',
+        price: '5000',
+        category: 'all'
+    };
+
+    // Apply cleared filters
+    applyFilters();
+}
+
+// Apply filters with AJAX
+function applyFilters() {
+    // Show loading spinner
+    document.getElementById('loadingSpinner').style.display = 'block';
+    document.getElementById('productsGrid').style.opacity = '0.5';
+
+    // Build URL with current filters
+    const params = new URLSearchParams();
+    
+    if (currentFilters.search) params.append('search', currentFilters.search);
+    if (currentFilters.sort) params.append('sort', currentFilters.sort);
+    if (currentFilters.price) params.append('price', currentFilters.price);
+    if (currentFilters.category && currentFilters.category !== 'all') {
+        params.append('category', currentFilters.category);
+    }
+
+    const url = `{% url 'shop:shop_list' %}?${params.toString()}`;
+
+    // Make AJAX request
+    fetch(url, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateProductGrid(data.products);
+        updateResultCount(data.total_count);
+        
+        // Hide loading spinner
+        document.getElementById('loadingSpinner').style.display = 'none';
+        document.getElementById('productsGrid').style.opacity = '1';
+        
+        // Update URL without page reload
+        window.history.pushState({}, '', url);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('loadingSpinner').style.display = 'none';
+        document.getElementById('productsGrid').style.opacity = '1';
+    });
+}
+
+// Update product grid with new data
+function updateProductGrid(products) {
+    const grid = document.getElementById('productsGrid');
+    
+    if (products.length === 0) {
+        grid.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-birthday-cake text-pink" style="font-size: 4rem; opacity: 0.3"></i>
+                <h4 class="text-muted mt-3">No cakes found</h4>
+                <p class="text-muted">Try adjusting your filters or search terms</p>
+                <button class="btn btn-pink" onclick="clearFilters()">
+                    <i class="fas fa-refresh me-2"></i>Clear Filters
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = products.map(product => `
+        <div class="product-card" data-product-id="${product.id}">
+            <div class="product-image">
+                <img src="${product.image_url}" alt="${product.name}" />
+                <div class="product-actions">
+                    <button class="action-btn" title="Quick View" onclick="quickView('${product.id}')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="product-info">
+                <h5 class="product-title">${product.name}</h5>
+                <p class="product-description">${product.description}</p>
+                <div class="product-price">
+                    <span class="current-price">Rs ${product.price}</span>
+                </div>
+                <div class="d-grid gap-2">
+                    <a href="${product.url}" class="btn btn-pink">
+                        <i class="fas fa-shopping-cart me-2"></i>View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Update result count
+function updateResultCount(count) {
+    document.getElementById('resultCount').textContent = count;
+}
+
+// Quick view modal
+function quickView(productId) {
+    fetch(`{% url 'shop:quick_view' 0 %}`.replace('0', productId), {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const product = data.product;
+            document.getElementById('quickViewContent').innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="${product.image_url}" alt="${product.name}" class="img-fluid rounded" />
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="text-pink">${product.name}</h4>
+                        <p class="text-muted">${product.description}</p>
+                        ${product.ingredients ? `<p><strong>Ingredients:</strong> ${product.ingredients}</p>` : ''}
+                        ${product.flavor_profile ? `<p><strong>Flavor:</strong> ${product.flavor_profile}</p>` : ''}
+                        ${product.occasion ? `<p><strong>Occasion:</strong> ${product.occasion}</p>` : ''}
+                        <div class="mb-3">
+                            <span class="h4 text-pink">Rs ${product.price}</span>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <a href="${product.url}" class="btn btn-pink btn-lg">
+                                <i class="fas fa-shopping-cart me-2"></i>View Full Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+            modal.show();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Category tab functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryTabs = document.querySelectorAll('.category-tab');
+
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Remove active class from all tabs
+            categoryTabs.forEach(t => t.classList.remove('active'));
+
+            // Add active class to clicked tab
+            this.classList.add('active');
+
+            const category = this.dataset.category;
+            currentFilters.category = category;
+            
+            // Apply filters
+            applyFilters();
+        });
+    });
+
+    // Search on Enter key
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchProducts();
+        }
+    });
+});
+</script>
+{% endblock %}

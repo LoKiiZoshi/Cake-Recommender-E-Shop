@@ -1,0 +1,64 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}All Products{% endif %} - Smart Cake Shop
+{% endblock %}
+
+{% block content %}
+<div class="container product-list">
+    <div class="row">
+        <!-- Category Sidebar -->
+        <div class="col-md-3">
+            <div class="category-sidebar">
+                <h3>Categories</h3>
+                <ul>
+                    <li {% if not category %}class="fw-bold"{% endif %}>
+                        <a href="{% url 'shop:categories' %}">All Categories</a>  
+                         {% comment %} <a href="{% url 'shop:product_list_by_category' 'all' %}">All Categories</a> {% endcomment %}
+                    </li>
+                    {% for c in categories %}
+                        <li {% if category.id == c.id %}class="fw-bold"{% endif %}>
+                            <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Product Grid -->
+        <div class="col-md-9">
+            <h2 class="mb-4">
+                {% if category %}
+                    {{ category.name }}
+                {% else %}
+                    All Cakes
+                {% endif %}
+            </h2>
+            
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top">
+                            {% else %}
+                                <img src="/static/images/placeholder.jpg" alt="{{ product.name }}" class="card-img-top">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description|truncatechars:50 }}</p>
+                                <p class="card-price">RS : {{ product.price }}</p>
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <p>No products found in this category.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
