@@ -1,0 +1,151 @@
+{% extends 'shop/base.html' %} {% load static %} {% block title %}eSewa
+Payment{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">eSewa Payment</h4>
+        </div>
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <img
+              src="{% static 'images/esewa-logo.png' %}"
+              alt="eSewa Logo"
+              class="img-fluid"
+              style="max-height: 80px"
+              onerror="this.src='https://esewa.com.np/common/images/esewa_logo.png'; this.onerror='';"
+            />
+          </div>
+
+          <div class="alert alert-info">
+            <p>
+              You are about to pay <strong>Rs. {{ total_amount }}</strong> for
+              your order #{{ order.id }}.
+            </p>
+            <p>Click the button below to proceed to eSewa payment gateway.</p>
+          </div>
+
+          <div class="order-summary mb-4">
+            <h5>Order Summary</h5>
+            <table class="table table-sm">
+              <tr>
+                <td>Order Total:</td>
+                <td>Rs. {{ amount }}</td>
+              </tr>
+              <tr>
+                <td>Tax (13%):</td>
+                <td>Rs. {{ tax_amount }}</td>
+              </tr>
+              <tr>
+                <td>Service Charge:</td>
+                <td>Rs. {{ service_charge }}</td>
+              </tr>
+              <tr>
+                <td>Delivery Charge:</td>
+                <td>Rs. {{ delivery_charge }}</td>
+              </tr>
+              <tr class="table-primary">
+                <th>Total Amount:</th>
+                <th>Rs. {{ total_amount }}</th>
+              </tr>
+            </table>
+          </div>
+
+          <!-- eSewa Payment Form -->
+          <form
+            action="{{ esewa_api_url }}"
+            method="POST"
+            id="esewaForm"
+            class="text-center"
+          >
+            <input type="hidden" name="amount" value="{{ amount }}" />
+            <input type="hidden" name="tax_amount" value="{{ tax_amount }}" />
+            <input
+              type="hidden"
+              name="total_amount"
+              value="{{ total_amount }}"
+            />
+            <input
+              type="hidden"
+              name="transaction_uuid"
+              value="{{ transaction_uuid }}"
+            />
+            <input
+              type="hidden"
+              name="product_code"
+              value="{{ product_code }}"
+            />
+            <input
+              type="hidden"
+              name="product_service_charge"
+              value="{{ service_charge }}"
+            />
+            <input
+              type="hidden"
+              name="product_delivery_charge"
+              value="{{ delivery_charge }}"
+            />
+            <input type="hidden" name="success_url" value="{{ success_url }}" />
+            <input type="hidden" name="failure_url" value="{{ failure_url }}" />
+            <input
+              type="hidden"
+              name="signed_field_names"
+              value="{{ signed_field_names }}"
+            />
+            <input type="hidden" name="signature" value="{{ signature }}" />
+
+            <button type="submit" class="btn btn-success btn-lg">
+              <i class="fas fa-credit-card me-2"></i> Pay with eSewa
+            </button>
+          </form>
+
+          <div class="mt-4 text-center">
+            <a
+              href="{% url 'shop:checkout' %}"
+              class="btn btn-outline-secondary"
+            >
+              <i class="fas fa-arrow-left me-2"></i> Back to Checkout
+            </a>
+          </div>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+            <i class="fas fa-lock me-1"></i> Your payment information is secure.
+            We use encryption to protect your data.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Client-side validation to ensure form fields are populated
+  document
+    .getElementById("esewaForm")
+    .addEventListener("submit", function (event) {
+      const requiredFields = [
+        "amount",
+        "tax_amount",
+        "total_amount",
+        "transaction_uuid",
+        "product_code",
+        "product_service_charge",
+        "product_delivery_charge",
+        "success_url",
+        "failure_url",
+        "signed_field_names",
+        "signature",
+      ];
+      for (const field of requiredFields) {
+        const input = document.querySelector(`input[name="${field}"]`);
+        if (!input || !input.value) {
+          event.preventDefault();
+          alert(`Error: ${field} is missing or empty. Please try again.`);
+          return;
+        }
+      }
+    });
+</script>
+{% endblock %}

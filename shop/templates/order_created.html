@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %} {% block title %}Order Confirmed - Smart Cake
+Shop{% endblock %} {% block content %}
+<div class="container my-5 text-center">
+  <div class="py-5">
+    <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+    <h1 class="display-4">Thank You!</h1>
+    <p class="lead">Your order has been successfully placed.</p>
+    <hr />
+    <p>Your order number is: <strong>#{{ order.id }}</strong></p>
+    <p>We'll send a confirmation email to <strong>{{ order.email }}</strong></p>
+    <p>You can check the status of your order in your account dashboard.</p>
+
+    <div class="mt-5">
+      <a href="{% url 'shop:home' %}" class="btn btn-primary"
+        >Continue Shopping</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %}
