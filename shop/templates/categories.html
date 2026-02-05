@@ -1,0 +1,294 @@
+{% extends 'shop/base.html' %} {% block title %} Categories - Smart Cake
+Shop{%endblock %} {% block extra_css %}
+<style>
+  .hero-section {
+    background: linear-gradient(
+      135deg,
+      rgba(251, 60, 149, 1) 0%,
+      rgba(251, 54, 159, 1) 100%
+    );
+    color: white;
+    padding: 80px 0 60px 0;
+  }
+
+  .category-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  .category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  }
+
+  .category-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2.5rem;
+    color: white;
+  }
+
+  .stats-section {
+    background: #f8f9fa;
+    padding: 60px 0;
+  }
+
+  .feature-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    height: 100%;
+  }
+
+  .breadcrumb-section {
+    background: #f8f9fa;
+    padding: 20px 0;
+  }
+</style>
+{% endblock %} {% block content %}
+<!-- Breadcrumb -->
+<section class="breadcrumb-section">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <a href="{% url 'shop:home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'shop:categories' %}">Categories</a>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container text-center">
+    <h1 class="display-4 fw-bold mb-4">🎂 Cake Categories</h1>
+    <p class="lead mb-4">
+      Explore our delicious collection of cakes for every occasion and taste
+      preference
+    </p>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="input-group input-group-lg">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search categories..."
+            id="categorySearch"
+          />
+          <button class="btn btn-warning" type="button">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Grid -->
+<section class="container my-5">
+  <div class="row g-4" id="categoriesGrid">
+    {% for category in categories %}
+    <div
+      class="col-lg-4 col-md-6 category-item"
+      data-category="{{ category.name|lower }}"
+    >
+      <div class="card category-card h-100 shadow-sm">
+        <div class="card-body text-center p-4">
+          <div class="category-icon bg-primary mb-3">
+            {% if 'birthday' in category.name|lower %}
+            <i class="fas fa-birthday-cake"></i>
+            {% elif 'wedding' in category.name|lower %}
+            <i class="fas fa-heart"></i>
+            {% elif 'custom' in category.name|lower %}
+            <i class="fas fa-palette"></i>
+            {% elif 'cupcake' in category.name|lower %}
+            <i class="fas fa-cookie-bite"></i>
+            {% elif 'chocolate' in category.name|lower %}
+            <i class="fas fa-candy-cane"></i>
+            {% elif 'fruit' in category.name|lower %}
+            <i class="fas fa-apple-alt"></i>
+            {% else %}
+            <i class="fas fa-birthday-cake"></i>
+            {% endif %}
+          </div>
+          <h4 class="card-title mb-3">{{ category.name }}</h4>
+          <p class="card-text text-muted mb-4">
+            {{ category.description|default:"Delicious cakes perfect" }}
+          </p>
+
+          <!-- Category Stats -->
+          <div class="row text-center mb-4">
+            <div class="col-6">
+              <div class="fw-bold text-primary">
+                {{ category.products.count }}
+              </div>
+              <small class="text-muted">Products</small>
+            </div>
+            {% comment %}
+            <div class="col-6">
+              <div class="fw-bold text-success">4.8★</div>
+              <small class="text-muted">Rating</small>
+            </div>
+            {% endcomment %}
+          </div>
+
+          <a
+            href="{{ category.get_absolute_url }}"
+            class="btn btn-primary btn-lg w-100"
+          >
+            <i class="fas fa-eye me-2"></i>Browse {{ category.name }}
+          </a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>No categories available yet.
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="display-5 fw-bold">Why Choose Our Categories?</h2>
+      <p class="lead text-muted">
+        Each category is carefully curated for the best experience
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div
+            class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+            style="width: 70px; height: 70px"
+          >
+            <i class="fas fa-award text-white fs-3"></i>
+          </div>
+          <h5>Premium Quality</h5>
+          <p class="text-muted">
+            All our cakes are made with the finest ingredients and expert
+            craftsmanship
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div
+            class="bg-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+            style="width: 70px; height: 70px"
+          >
+            <i class="fas fa-palette text-white fs-3"></i>
+          </div>
+          <h5>Custom Designs</h5>
+          <p class="text-muted">
+            Personalize your cakes with custom designs and flavors for special
+            occasions
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div
+            class="bg-warning rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+            style="width: 70px; height: 70px"
+          >
+            <i class="fas fa-truck text-white fs-3"></i>
+          </div>
+          <h5>Fast Delivery</h5>
+          <p class="text-muted">
+            Quick and reliable delivery to ensure your cakes arrive fresh and on
+            time
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Popular Categories -->
+<section class="container my-5">
+  <div class="text-center mb-5">
+    <h2 class="display-5 fw-bold">🔥 Most Popular Categories</h2>
+    <p class="lead text-muted">Customer favorites that you shouldn't miss</p>
+  </div>
+
+  <div class="row g-4">
+    {% for category in popular_categories %}
+    <div class="col-md-6">
+      <div class="card border-0 shadow-lg">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <div
+              class="bg-gradient-primary h-100 d-flex align-items-center justify-content-center"
+            >
+              <i
+                class="{{ category.icon_class }} text-white"
+                style="font-size: 3rem"
+              ></i>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ category.name }}</h5>
+              <p class="card-text">{{ category.description }}</p>
+              <a href="{{ category.get_absolute_url }}" class="btn btn-primary">
+                Explore Now
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>No popular categories available
+        yet.
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %} {% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("categorySearch");
+    const categoryItems = document.querySelectorAll(".category-item");
+
+    searchInput.addEventListener("input", function () {
+      const searchTerm = this.value.toLowerCase();
+
+      categoryItems.forEach((item) => {
+        const categoryName = item.dataset.category;
+        if (categoryName.includes(searchTerm)) {
+          item.style.display = "block";
+        } else {
+          item.style.display = "none";
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,971 @@
+{% extends 'shop/base.html' %}
+{% block title %}Contact Us - Smart Cake Shop{% endblock %}
+{% block extra_css %}
+<style>
+  :root { 
+    --primary-pink:rgba(254, 54, 161, 1);
+    --light-pink:#fdfbfc;
+    --dark-pink:hsl(321, 92.30%, 54.30%);  
+    --accent-pink:rgba(247, 54, 173, 1);
+    --soft-pink:#fffdfe; 
+    --gradient-pink: linear-gradient(135deg, #f93d8eff 0%, #f93c88ff 50%, #f53b98ff 100%);  
+    --gradient-light: linear-gradient(135deg,#fdf8fa 0%,#f7f7f7 100%);
+  }
+
+  
+
+  .hero-section {
+    background: var(--gradient-pink);
+    color: white;
+    padding: 100px 0 80px 0;
+    position: relative;
+    overflow: hidden;   
+  } 
+
+
+
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="cake" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23cake)"/></svg>');
+    opacity: 0.3;
+  }
+
+  .hero-section .container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-section h1 {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .contact-card {
+    background: white;
+    border-radius: 25px;
+    padding: 50px;
+    box-shadow: 0 20px 60px rgba(233, 30, 99, 0.15);
+    margin-top: -60px;
+    position: relative;
+    z-index: 3;
+    border: 1px solid var(--light-pink);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 80px rgba(233, 30, 99, 0.2);
+  }
+
+  .contact-card h3 {
+    color: var(--primary-pink);
+    position: relative;
+  }
+
+  .contact-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--gradient-pink);
+    border-radius: 2px;
+  }
+
+  .form-label {
+    color: var(--dark-pink);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .form-control, .form-select {
+    border: 2px solid #f0f0f0;
+    border-radius: 15px;
+    padding: 15px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #fafafa;
+  }
+
+  .form-control:focus, .form-select:focus {
+    border-color: var(--primary-pink);
+    box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.15);
+    background: white;
+    transform: translateY(-2px);
+  }
+
+  .form-control:hover, .form-select:hover {
+    border-color: var(--light-pink);
+    background: white;
+  }
+
+  .form-check-input:checked {
+    background-color: var(--primary-pink);
+    border-color: var(--primary-pink);
+  }
+
+  .form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.25);
+  }
+
+  .btn-primary {
+    background: var(--gradient-pink);
+    border: none;
+    border-radius: 50px;
+    padding: 18px 40px;
+    font-weight: 600;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(233, 30, 99, 0.4);
+  }
+
+  .contact-info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(233, 30, 99, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid var(--soft-pink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-pink);
+  }
+
+  .contact-info-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(233, 30, 99, 0.2);
+  }
+
+  .contact-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    font-size: 2.2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-icon.bg-primary {
+    background: var(--gradient-pink);
+  }
+
+  .contact-icon.bg-success {
+    background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+  }
+
+  .contact-icon.bg-warning {
+    background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+  }
+
+  .contact-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    transform: translate(-50%, -50%);
+  }
+
+  .contact-info-card:hover .contact-icon::before {
+    width: 100%;
+    height: 100%;
+  }
+
+  .breadcrumb-section {
+    background: var(--gradient-light);
+    padding: 25px 0;
+    border-bottom: 1px solid var(--light-pink);
+  }
+
+  .breadcrumb-item a {
+    color: var(--dark-pink);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .breadcrumb-item a:hover {
+    color: var(--primary-pink);
+  }
+
+  .breadcrumb-item.active {
+    color: var(--primary-pink);
+    font-weight: 600;
+  }
+
+  .map-container {
+    height: 450px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(233, 30, 99, 0.15);
+    border: 3px solid var(--soft-pink);
+    transition: transform 0.3s ease;
+  }
+
+  .map-container:hover {
+    transform: scale(1.02);
+  }
+
+  .faq-item {
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(233, 30, 99, 0.08);
+    border: 1px solid var(--soft-pink);
+    overflow: hidden;
+  }
+
+  .accordion-button {
+    background: var(--soft-pink);
+    color: var(--dark-pink);
+    font-weight: 600;
+    border: none;
+    padding: 20px 25px;
+    font-size: 16px;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background: var(--gradient-pink);
+    color: white;
+    box-shadow: none;
+  }
+
+  .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.25);
+  }
+
+  .accordion-body {
+    padding: 25px;
+    background: #fafafa;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .social-links a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.2);
+    transform: scale(0);
+    transition: transform 0.3s ease;
+    border-radius: 50%;
+  }
+
+  .social-links a:hover::before {
+    transform: scale(1);
+  }
+
+  .social-links a:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+
+  .bg-light {
+    background: var(--gradient-light) !important;
+  }
+
+  .business-hours-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(233, 30, 99, 0.1);
+    border: 1px solid var(--soft-pink);
+  }
+
+  .business-hours-card h3 {
+    color: var(--primary-pink);
+    margin-bottom: 30px;
+  }
+
+  .day-time {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--soft-pink);
+    transition: background 0.3s ease;
+  }
+
+  .day-time:hover {
+    background: var(--soft-pink);
+    border-radius: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .day-time:last-child {
+    border-bottom: none;
+  }
+
+  .btn-outline-primary {
+    color: var(--primary-pink);
+    border-color: var(--primary-pink);
+    border-width: 2px;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-primary:hover {
+    background: var(--primary-pink);
+    border-color: var(--primary-pink);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(233, 30, 99, 0.3);
+  }
+
+  .btn-outline-success {
+    color: #4caf50;
+    border-color: #4caf50;
+    border-width: 2px;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-success:hover {
+    background: #4caf50;
+    border-color: #4caf50;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+  }
+
+  .btn-outline-warning {
+    color: #ff9800;
+    border-color: #ff9800;
+    border-width: 2px;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-warning:hover {
+    background: #ff9800;
+    border-color: #ff9800;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 152, 0, 0.3);
+  }
+
+  .section-title {
+    color: var(--dark-pink);
+    position: relative;
+    margin-bottom: 50px;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-pink);
+    border-radius: 2px;
+  }
+
+  .alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border: 1px solid #b8dacc;
+    color: #155724;
+    border-radius: 15px;
+  }
+
+  .alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
+    border: 1px solid #f1b0b7;
+    color: #721c24;
+    border-radius: 15px;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .contact-card, .contact-info-card, .faq-item {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .contact-info-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .contact-info-card:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 60px 0 40px 0;
+    }
+    
+    .contact-card {
+      padding: 30px 20px;
+      margin-top: -40px;
+    }
+    
+    .contact-icon {
+      width: 70px;
+      height: 70px;
+      font-size: 1.8rem;
+    }
+    
+    .social-links a {
+      width: 45px;
+      height: 45px;
+    }
+  }
+
+  /* Loading Animation */
+  .btn-primary .fa-spinner {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb --> 
+<section class="breadcrumb-section"> 
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Contact</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container text-center">
+    <h1 class="display-4 fw-bold mb-4">📞 Contact Us</h1>
+    <p class="lead mb-4">We'd love to hear from you! Get in touch with our team</p>
+    <p class="fs-5">Have questions about our cakes or AI recommendations? We're here to help!</p>
+  </div>
+</section>
+
+<!-- Contact Form -->
+<section class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="contact-card">
+        <div class="text-center mb-4">
+          <h3 class="fw-bold">Send us a Message</h3>
+          <p class="text-muted">Fill out the form below and we'll get back to you within 24 hours</p>
+        </div>
+
+        <form id="contactForm" action="{% url 'shop:contact' %}" method="POST">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="firstName" class="form-label">First Name *</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="firstName"
+                name="first_name"
+                value="{{ form_data.first_name|default:'' }}"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="lastName" class="form-label">Last Name *</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="lastName"
+                name="last_name"
+                value="{{ form_data.last_name|default:'' }}"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email Address *</label>
+              <input
+                type="email"
+                class="form-control form-control-lg"
+                id="email"
+                name="email"
+                value="{{ form_data.email|default:'' }}"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input
+                type="tel"
+                class="form-control form-control-lg"
+                id="phone"
+                name="phone"
+                value="{{ form_data.phone|default:'' }}"
+              />
+            </div>
+            <div class="col-12">
+              <label for="subject" class="form-label">Subject *</label>
+              <select
+                class="form-select form-select-lg"
+                id="subject"
+                name="subject"
+                required
+              >
+                <option value="">Choose a subject...</option>
+                <option value="general" {% if form_data.subject == 'general' %}selected{% endif %}>General Inquiry</option>
+                <option value="order" {% if form_data.subject == 'order' %}selected{% endif %}>Order Related</option>
+                <option value="custom" {% if form_data.subject == 'custom' %}selected{% endif %}>Custom Cake Request</option>
+                <option value="ai" {% if form_data.subject == 'ai' %}selected{% endif %}>AI Recommendations</option>
+                <option value="feedback" {% if form_data.subject == 'feedback' %}selected{% endif %}>Feedback</option>
+                <option value="complaint" {% if form_data.subject == 'complaint' %}selected{% endif %}>Complaint</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="message" class="form-label">Message *</label>
+              <textarea
+                class="form-control"
+                id="message"
+                name="message"
+                rows="5"
+                placeholder="Tell us how we can help you..."
+                required
+              >{{ form_data.message|default:'' }}</textarea>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="newsletter"
+                  name="newsletter"
+                  {% if form_data.newsletter %}checked{% endif %}
+                />
+                <label class="form-check-label" for="newsletter">
+                  Subscribe to our newsletter for updates and special offers
+                </label>
+              </div>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-lg w-100">
+                <i class="fas fa-paper-plane me-2"></i>Send Message
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div id="formMessage" class="alert mt-3" style="display: none"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Information -->
+<section class="container my-5 py-5">
+  <div class="text-center mb-5">
+    <h2 class="display-5 fw-bold section-title">Get in Touch</h2>
+    <p class="lead text-muted">Multiple ways to reach us</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="contact-info-card">
+        <div class="contact-icon bg-primary">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <h5 class="fw-bold">Visit Our Store</h5>
+        <p class="text-muted mb-3">
+          123 Cake Street<br />Bakery City, BC 12345<br />Nepal
+        </p>
+        <a href="#" class="btn btn-outline-primary">Get Directions</a>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="contact-info-card">
+        <div class="contact-icon bg-success">
+          <i class="fas fa-phone"></i>
+        </div>
+        <h5 class="fw-bold">Call Us</h5>
+        <p class="text-muted mb-3">
+          <strong>Main:</strong> +977 1-234-5678<br />
+          <strong>Orders:</strong> +977 1-234-5679<br />
+          <strong>Support:</strong> +977 1-234-5680
+        </p>
+        <a href="tel:+97712345678" class="btn btn-outline-success">Call Now</a>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="contact-info-card">
+        <div class="contact-icon bg-warning">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <h5 class="fw-bold">Email Us</h5>
+        <p class="text-muted mb-3">
+          <strong>General:</strong> info@smartcakeshop.com<br />
+          <strong>Orders:</strong> orders@smartcakeshop.com<br />
+          <strong>Support:</strong> support@smartcakeshop.com
+        </p>
+        <a href="mailto:info@smartcakeshop.com" class="btn btn-outline-warning">Send Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Business Hours -->
+<section class="bg-light py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="business-hours-card">
+          <h3 class="fw-bold mb-4">Business Hours</h3>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="day-time d-flex justify-content-between">
+                <span class="fw-semibold">Monday:</span>
+                <span>8:00 AM - 9:00 PM</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="day-time d-flex justify-content-between">
+                <span class="fw-semibold">Tuesday:</span>
+                <span>8:00 AM - 9:00 PM</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="day-time d-flex justify-content-between">
+                <span class="fw-semibold">Wednesday:</span>
+                <span>8:00 AM - 9:00 PM</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="day-time d-flex justify-content-between">
+                <span class="fw-semibold">Thursday:</span>
+                <span>8:00 AM - 9:00 PM</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="day-time d-flex justify-content-between">
+                <span class="fw-semibold">Friday:</span>
+                <span>8:00 AM - 10:00 PM</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="day-time d-flex justify-content-between">
+                <span class="fw-semibold">Saturday:</span>
+                <span>8:00 AM - 10:00 PM</span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="day-time d-flex justify-content-between">
+                <span class="fw-semibold">Sunday:</span>
+                <span class="text-success fw-bold">8:00 AM - 10:00 PM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h5 class="fw-bold">Follow Us</h5>
+            <div class="social-links d-flex gap-3 mt-3">
+              <a href="#" class="bg-primary"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="bg-danger"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="bg-info"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="bg-dark"><i class="fab fa-tiktok"></i></a>
+              <a href="#" class="bg-success"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="map-container">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d3533.170328618539!2d85.32885337517024!3d27.68113002664783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x39eb19ee55287827%3A0x90f1463e7010f21!2sEcho%20Innovators%20Pvt.%20Ltd%2C%20Kathmandu%2044600!3m2!1d27.6811285!2d85.3314379!5e0!3m2!1sen!2snp!4v1748256338360!5m2!1sen!2snp"
+            width="600"
+            height="450"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="container my-5 py-5">
+  <div class="text-center mb-5">
+    <h2 class="display-5 fw-bold section-title">Frequently Asked Questions</h2>
+    <p class="lead text-muted">Quick answers to common questions</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="accordion" id="faqAccordion">
+        <div class="faq-item">
+          <div class="accordion-item border-0">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#faq1"
+              >
+                How does your AI recommendation system work?
+              </button>
+            </h2>
+            <div
+              id="faq1"
+              class="accordion-collapse collapse show"
+              data-bs-parent="#faqAccordion"
+            >
+              <div class="accordion-body">
+                Our AI system analyzes your browsing history, purchase patterns,
+                and preferences to suggest cakes you'll love. It uses
+                collaborative filtering and content-based algorithms to provide
+                personalized recommendations.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="accordion-item border-0">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#faq2"
+              >
+                Do you offer custom cake designs?
+              </button>
+            </h2>
+            <div
+              id="faq2"
+              class="accordion-collapse collapse"
+              data-bs-parent="#faqAccordion"
+            >
+              <div class="accordion-body">
+                Yes! We specialize in custom cake designs for weddings,
+                birthdays, and special occasions. Contact us at least 48 hours
+                in advance to discuss your requirements.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="accordion-item border-0">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#faq3"
+              >
+                What are your delivery options?
+              </button>
+            </h2>
+            <div
+              id="faq3"
+              class="accordion-collapse collapse"
+              data-bs-parent="#faqAccordion"
+            >
+              <div class="accordion-body">
+                We offer same-day delivery within the city for orders placed
+                before 2 PM. Free delivery is available for orders above Rs
+                2000. We also provide scheduled delivery for special occasions.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="accordion-item border-0">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#faq4"
+              >
+                Do you have vegan or gluten-free options?
+              </button>
+            </h2>
+            <div
+              id="faq4"
+              class="accordion-collapse collapse"
+              data-bs-parent="#faqAccordion"
+            >
+              <div class="accordion-body">
+                We offer a variety of vegan, gluten-free, and sugar-free
+                options. These can be found in our special dietary category or
+                requested as custom orders.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const contactForm = document.getElementById("contactForm");
+    const formMessage = document.getElementById("formMessage");
+
+    contactForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(contactForm);
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+        submitBtn.disabled = true;
+
+        // Submit form via AJAX
+        fetch("{% url 'shop:contact_ajax' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok');
+        })
+        .then(data => {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+
+            // Show success or error message
+            formMessage.className = `alert alert-${data.success ? 'success' : 'danger'} mt-3`;
+            formMessage.innerHTML = `<i class="fas fa-${data.success ? 'check-circle' : 'exclamation-circle'} me-2"></i>${data.message}`;
+            formMessage.style.display = "block";
+
+            if (data.success) {
+                // Reset form
+                contactForm.reset();
+            }
+        })
+        .catch(error => {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+
+            // Show error message
+            formMessage.className = "alert alert-danger mt-3";
+            formMessage.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>Sorry, there was an error sending your message. Please try again.`;
+            formMessage.style.display = "block";
+        })
+        .finally(() => {
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                formMessage.style.display = "none";
+            }, 5000);
+        });
+    });
+});
+</script>
+{% endblock %}

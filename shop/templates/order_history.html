@@ -1,0 +1,81 @@
+{% extends "shop/base.html" %} {% load static %} {% block title %} My Orders
+{%endblock %} {% block content %}
+<div class="container py-5">
+  <h2 class="mb-4">My Orders</h2>
+
+  {% if orders %}
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Order #</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>{{ order.order_ref }}</td>
+          <td>{{ order.created|date:"M d, Y" }}</td>
+          <td>Rs. {{ order.get_total_cost }}</td>
+          <td>
+            {% if order.status == 'pending' %}
+            <span class="badge bg-warning text-dark">Pending</span>
+            {% elif order.status == 'processing' %}
+            <span class="badge bg-info text-dark">Processing</span>
+            {% elif order.status == 'shipped' %}
+            <span class="badge bg-primary">Shipped</span>
+            {% elif order.status == 'delivered' %}
+            <span class="badge bg-success">Delivered</span>
+            {% elif order.status == 'cancelled' %}
+            <span class="badge bg-danger">Cancelled</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if order.payment_method == 'cod' %}
+            <span class="badge bg-success">Cash on Delivery</span>
+            {% elif order.payment_method == 'esewa' %}
+            <span class="badge bg-success">eSewa</span>
+            {% if order.payment_status == 'pending' %}
+            <span class="badge bg-warning text-dark">Pending</span>
+            {% elif order.payment_status == 'completed' %}
+            <span class="badge bg-success">Paid</span>
+            {% elif order.payment_status == 'failed' %}
+            <span class="badge bg-danger">Failed</span>
+            {% endif %} {% endif %}
+          </td>
+
+          <td>
+            <a
+              href="{% url 'shop:order_detail' order.id %}"
+              class="btn btn-sm btn-outline-primary"
+            >
+              <i class="fas fa-eye"></i> View
+            </a>
+
+            <a
+              href="{% url 'shop:esewa_payment' order.id %}"
+              class="btn btn-sm btn-success"
+            >
+              <i class="fas fa-credit-card"></i> Pay Now
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    <p>You haven't placed any orders yet.</p>
+    <a href="{% url 'shop:product_list' %}" class="btn btn-primary mt-2">
+      <i class="fas fa-shopping-bag me-2"></i> Start Shopping
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
